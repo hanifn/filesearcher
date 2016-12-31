@@ -7,9 +7,9 @@ import scala.annotation.tailrec
 /**
   * Created by hanifnorman on 31/12/16.
   */
-class Matcher(filter: String, val rootLocation: String = new File(".").getCanonicalPath(),
+class Matcher(filter: String, val rootLocation: String = new File(".").getCanonicalPath,
               checkSubFolders: Boolean = false, contentFilter: Option[String] = None) {
-  val rootIOObject = FileConverter.convertToIOObject(new File(rootLocation))
+  val rootIOObject: IOObject = FileConverter.convertToIOObject(new File(rootLocation))
 
   def execute(): List[String] = {
     @tailrec

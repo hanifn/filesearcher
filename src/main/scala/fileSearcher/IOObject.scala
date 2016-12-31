@@ -8,7 +8,7 @@ import java.io.File
 
 trait IOObject {
   val file: File
-  val name = file.getName()
+  val name: String = file.getName
 }
 
 case class FileObject(file: File) extends IOObject

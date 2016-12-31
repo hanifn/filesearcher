@@ -3,12 +3,13 @@ package fileSearcher
 import java.io.File
 
 import scala.util.control.NonFatal
+import scala.util.matching.Regex
 
 /**
   * Created by hanifnorman on 30/12/16.
   */
 class FilterChecker(filter: String) {
-  val filterAsRegex = filter.r
+  val filterAsRegex: Regex = filter.r
   def matches(content: String): Boolean =
     filterAsRegex findFirstMatchIn content match {
       case Some(_) => true
@@ -17,11 +18,11 @@ class FilterChecker(filter: String) {
 
   def findMatchedFiles(iOObjects: List[IOObject]): List[IOObject] =
     for (iOObject <- iOObjects
-      if (iOObject.isInstanceOf[FileObject])
-      if (matches(iOObject.name)))
+      if iOObject.isInstanceOf[FileObject]
+      if matches(iOObject.name))
     yield iOObject
 
-  def findMatchedContentCount(file: File) = {
+  def findMatchedContentCount(file: File): Int = {
     def getFilterMatchCount(content: String) =
       (filterAsRegex findAllIn content).length
 
