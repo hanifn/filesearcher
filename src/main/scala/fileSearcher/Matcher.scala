@@ -11,7 +11,7 @@ class Matcher(filter: String, val rootLocation: String = new File(".").getCanoni
               checkSubFolders: Boolean = false, contentFilter: Option[String] = None) {
   val rootIOObject: IOObject = FileConverter.convertToIOObject(new File(rootLocation))
 
-  def execute(): List[String] = {
+  def execute(): List[(String, Option[Int])] = {
     @tailrec
     def recursiveMatch(files: List[IOObject], currentList: List[FileObject]): List[FileObject] =
     files match {
@@ -35,11 +35,13 @@ class Matcher(filter: String, val rootLocation: String = new File(".").getCanoni
     }
 
     val contentFilteredFiles = contentFilter match {
-      case Some(dataFilter) => matchedFiles filter(iOObject =>
-        FilterChecker(dataFilter).findMatchedContentCount(iOObject.file) > 0)
-      case None => matchedFiles
+      case Some(dataFilter) => matchedFiles.map(iOObject =>
+          (iOObject, Some(FilterChecker(dataFilter)
+            .findMatchedContentCount(iOObject.file)))
+        ).filter(matchTuple => matchTuple._2.getOrElse(0) > 0)
+      case None => matchedFiles map (iOObject => (iOObject, None))
     }
 
-    contentFilteredFiles map(iOObject => iOObject.name)
+    contentFilteredFiles map{ case (iOObject, count) => (iOObject.name, count) }
   }
 }
