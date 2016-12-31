@@ -42,6 +42,6 @@ class Matcher(filter: String, val rootLocation: String = new File(".").getCanoni
       case None => matchedFiles map (iOObject => (iOObject, None))
     }
 
-    contentFilteredFiles map{ case (iOObject, count) => (iOObject.name, count) }
+    contentFilteredFiles map{ case (iOObject, count) => (iOObject.fullName, count) }
   }
 }

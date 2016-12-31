@@ -2,6 +2,8 @@ package fileSearcher
 
 import java.io.File
 
+import scala.util.control.NonFatal
+
 /**
   * Created by hanifnorman on 30/12/16.
   */
@@ -9,6 +11,7 @@ import java.io.File
 trait IOObject {
   val file: File
   val name: String = file.getName
+  val fullName = try file.getAbsolutePath catch { case NonFatal(_) => name }
 }
 
 case class FileObject(file: File) extends IOObject
