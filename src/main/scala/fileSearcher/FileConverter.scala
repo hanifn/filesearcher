@@ -6,7 +6,7 @@ import java.io.File
   * Created by hanifnorman on 31/12/16.
   */
 object FileConverter {
-  def convertToIOObject(file: File) =
+  def convertToIOObject(file: File): IOObject =
     if (file.isDirectory()) DirectoryObject(file)
     else FileObject(file)
 }

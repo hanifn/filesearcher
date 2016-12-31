@@ -8,10 +8,10 @@ import scala.annotation.tailrec
   * Created by hanifnorman on 31/12/16.
   */
 class Matcher(filter: String, val rootLocation: String = new File(".").getCanonicalPath(),
-              checkSubFolders: Boolean = false) {
+              checkSubFolders: Boolean = false, contentFilter: Option[String] = None) {
   val rootIOObject = FileConverter.convertToIOObject(new File(rootLocation))
 
-  def execute() = {
+  def execute(): List[String] = {
     @tailrec
     def recursiveMatch(files: List[IOObject], currentList: List[FileObject]): List[FileObject] =
     files match {
@@ -34,6 +34,12 @@ class Matcher(filter: String, val rootLocation: String = new File(".").getCanoni
       case _ => List()
     }
 
-    matchedFiles map(iOObject => iOObject.name)
+    val contentFilteredFiles = contentFilter match {
+      case Some(dataFilter) => matchedFiles filter(iOObject =>
+        FilterChecker(dataFilter).findMatchedContentCount(iOObject.file) > 0)
+      case None => matchedFiles
+    }
+
+    contentFilteredFiles map(iOObject => iOObject.name)
   }
 }
