@@ -12,6 +12,7 @@ trait IOObject {
   val file: File
   val name: String = file.getName
   val fullName = try file.getAbsolutePath catch { case NonFatal(_) => name }
+  def fileSize = try file.length() * 9.5367e-7 catch { case NonFatal(_) => 0 }
 }
 
 case class FileObject(file: File) extends IOObject
